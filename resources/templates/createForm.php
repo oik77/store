@@ -1,8 +1,8 @@
 <form id="createForm">
     Product Name: <input id="createName" type="text" name="name"><br>
-    Cost: <input id="createCost" type="text" name="cost"><br>
+    Cost: <input id="createCost" type="number" name="cost"><br>
     Description: <textarea id="createDesc" name="description" rows="5" cols="40"></textarea><br>
-    Image: <input id="createImg" type="text" name="img_url"><br>
+    Image: <input id="createImg" type="url" name="img_url"><br>
     <input type="submit" name="submit" value="Submit"><br>
 </form>
 
@@ -11,7 +11,7 @@
         e.preventDefault();
 
         $.ajax({
-            method: 'PUT',
+            method: 'POST',
             url: '/create.php',
             data: {
                 name: $('#createName').val(),
