@@ -1,13 +1,14 @@
+<div>
 <?php
-
 require_once(RESOURCES . "/config.php");
 
 $conn = mysqli_connect($serverName, $userName, $password, $schema);
+
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-$sql = "SELECT * FROM products";
+$sql = "SELECT * FROM products LIMIT 500;";
 $result = mysqli_query($conn, $sql);
 
 if (mysqli_num_rows($result) > 0) {
@@ -24,3 +25,5 @@ if (mysqli_num_rows($result) > 0) {
 }
 
 mysqli_close($conn);
+?>
+</div>
