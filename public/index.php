@@ -13,9 +13,14 @@ define('TEMPLATES', RESOURCES . "templates/");
 <body>
 
 <?php
+if ($_SERVER["REQUEST_METHOD"] !== "GET") {
+    http_response_code(405);
+    die("Method Not Allowed ");
+}
+
 require_once TEMPLATES . 'toolbar.php';
 require_once TEMPLATES . 'createForm.php';
-require_once TEMPLATES . 'produtList.php';
+require_once TEMPLATES . 'productList.php';
 ?>
 
 </body>

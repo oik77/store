@@ -39,7 +39,19 @@ if (empty($description) and empty($imgUrl)) {
     mysqli_stmt_bind_param($stmt, "sdss", $name, $cost, $description, $imgUrl);
 }
 
-mysqli_stmt_execute($stmt);
+if (!$stmt) {
+    http_response_code(500);
+    mysqli_close($conn);
+    die("statement prepare error");
+}
+
+$success = mysqli_stmt_execute($stmt);
+
+if (!$success) {
+    http_response_code(500);
+    mysqli_close($conn);
+    die('statement execution failed' . mysqli_stmt_error($stmt));
+}
 
 mysqli_stmt_close($stmt);
 

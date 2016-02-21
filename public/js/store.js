@@ -20,4 +20,17 @@ $(document).ready(function() {
             }
         });
     });
+
+    $('.delete-btn').click(function() {
+        var $listItem = $(this).parent().parent();
+
+        $.ajax({
+            method: 'GET',
+            url: '/delete.php',
+            data: { id: $listItem.data('id') },
+            success: function() {
+                $listItem.remove();
+            }
+        });
+    })
 });
