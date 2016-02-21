@@ -14,7 +14,12 @@ $imgUrl = $_GET["img_url"];
 
 if (empty($name) or empty($cost)) {
     http_response_code(400);
-    die("Product Name is required");
+    die("Product Name and Cost are required");
+}
+
+if (!filter_var($cost, FILTER_VALIDATE_FLOAT)) {
+    http_response_code(400);
+    die("Cost should be float");
 }
 
 require_once(RESOURCES . "/config.php");
