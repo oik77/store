@@ -5,23 +5,3 @@
     Image: <input id="createImg" type="url" name="img_url"><br>
     <input type="submit" name="submit" value="Submit"><br>
 </form>
-
-<script>
-    $('#create-form').submit(function(e) {
-        e.preventDefault();
-
-        $.ajax({
-            method: 'POST',
-            url: '/create.php',
-            data: {
-                name: $('#createName').val(),
-                cost: $('#createCost').val(),
-                description: $('#createDesc').val(),
-                img_url: $('#createImg').val()
-            },
-            success: function() {
-                alert('success');
-            }
-        });
-    })
-</script>
