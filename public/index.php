@@ -7,9 +7,16 @@ define('TEMPLATES', RESOURCES . "templates/");
 <html>
 <head>
     <style>
+        #toolbar {
+            padding-bottom: 5px;
+        }
+        #create-form {
+            padding: 5px;
+        }
         .list-item {
             border: 1px solid #D5D5D5;
             margin-bottom: -1px;
+            padding-bottom: 5px;
         }
         .item-img {
             float: left;
@@ -29,8 +36,8 @@ define('TEMPLATES', RESOURCES . "templates/");
 <body>
 
 <?php
+require_once TEMPLATES . 'toolbar.php';
 require_once TEMPLATES . 'createForm.php';
-
 require_once TEMPLATES . 'produtList.php';
 ?>
 

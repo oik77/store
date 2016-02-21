@@ -6,5 +6,7 @@
     <div class="item-content">
         <h2><?php echo $name; ?></h2>
         <p><?php echo $description; ?></p>
+        <button class="update-btn" type="button">Update</button>
+        <button class="delete-btn" type="button">Delete</button>
     </div>
 </div>
