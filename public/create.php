@@ -2,15 +2,15 @@
 define('RESOURCES', dirname(__DIR__) . "/resources/");
 define('TEMPLATES', RESOURCES . "templates/");
 
-if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+if ($_SERVER["REQUEST_METHOD"] !== "GET") {
     http_response_code(405);
     die("Method Not Allowed ");
 }
 
-$name = $_POST["name"];
-$cost = $_POST["cost"];
-$description = $_POST["description"];
-$imgUrl = $_POST["img_url"];
+$name = $_GET["name"];
+$cost = $_GET["cost"];
+$description = $_GET["description"];
+$imgUrl = $_GET["img_url"];
 
 if (empty($name) or empty($cost)) {
     http_response_code(400);

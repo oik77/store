@@ -7,7 +7,7 @@ $(document).ready(function() {
         e.preventDefault();
 
         $.ajax({
-            method: 'POST',
+            method: 'GET',
             url: '/create.php',
             data: {
                 name: $('#createName').val(),
