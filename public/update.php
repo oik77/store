@@ -9,7 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
 
 $productId = filter_var($_POST["productId"], FILTER_VALIDATE_INT);
 $name = $_POST["name"];
-$cost = $_POST["cost"];
+$cost = filter_var($_POST["cost"], FILTER_VALIDATE_FLOAT);
 $description = $_POST["description"];
 $imgUrl = $_POST["imgUrl"];
 
@@ -17,32 +17,13 @@ if ($productId === false) {
     http_response_code(400);
     die("Invalid productId");
 }
-
-if (!empty($cost) and filter_var($cost, FILTER_VALIDATE_FLOAT) === false) {
+if (empty($name)) {
+    http_response_code(400);
+    die("Product Name required");
+}
+if ($cost === false) {
     http_response_code(400);
     die("Invalid cost");
-}
-
-$updateValues = array();
-// FIXME prepare params
-if (!empty($name)) {
-    $updateValues[] = "name='" . $name . "'";
-}
-if (!empty($cost)) {
-    $updateValues[] = "cost=" . $cost;
-}
-if (!empty($description)) {
-    $updateValues[] = "description='" . $description . "'";
-}
-if (!empty($imgUrl)) {
-    $updateValues[] = "img_url='" . $imgUrl . "'";
-}
-
-$updateValuesStr = implode(",", $updateValues);
-
-if (empty($updateValuesStr)) {
-    mysqli_close($conn);
-    die("nothing updated");
 }
 
 require_once(RESOURCES . "/config.php");
@@ -54,7 +35,12 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-$sql = "UPDATE products SET " . $updateValuesStr . " WHERE id_products=?";
+$sql = "UPDATE products SET "
+    . "name=?,"
+    . "cost=?,"
+    . "description=?,"
+    . "img_url=? "
+    . "WHERE id_products=?";
 $stmt = mysqli_prepare($conn, $sql);
 
 if (!$stmt) {
@@ -63,7 +49,8 @@ if (!$stmt) {
     die("statement prepare error");
 }
 
-mysqli_stmt_bind_param($stmt, "i", $productId);
+mysqli_stmt_bind_param($stmt, "sdssi",
+    $name, $cost, $description, $imgUrl, $productId);
 
 $success = mysqli_stmt_execute($stmt);
 
