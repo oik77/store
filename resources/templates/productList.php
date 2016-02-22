@@ -1,39 +1,46 @@
-<div id="product-list">
 <?php
-require_once(RESOURCES . "/config.php");
-
 function validateText($data) {
     $data = trim($data);
     $data = htmlspecialchars($data);
     return $data;
 }
 
-function includeListItem($product) {
-    $productId = validateText($product["id_products"]);
-    $name = validateText($product["name"]);
-    $cost = validateText($product["cost"]);
-    $description = validateText($product["description"]);
-    $imgUrl = validateText($product["img_url"]);
-    include TEMPLATES . "listItem.php";
-}
+function includeListItems($limit, $offset) {
+    require RESOURCES . "/config.php";
 
-$conn = mysqli_connect($serverName, $userName, $password, $schema);
+    $conn = mysqli_connect($serverName, $userName, $password, $schema);
 
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
-
-$sql = "SELECT * FROM products LIMIT 100;";
-$result = mysqli_query($conn, $sql);
-
-if (mysqli_num_rows($result) > 0) {
-    while($row = mysqli_fetch_assoc($result)) {
-        includeListItem($row);
+    if (!$conn) {
+        http_response_code(500);
+        die("Connection failed: " . mysqli_connect_error());
     }
-} else {
-    echo "0 results";
-}
 
-mysqli_close($conn);
-?>
-</div>
+    $stmt = mysqli_prepare($conn, "SELECT * FROM products LIMIT ? OFFSET ?");
+
+    if (!$stmt) {
+        http_response_code(500);
+        mysqli_close($conn);
+        die("statement prepare error");
+    }
+
+    mysqli_stmt_bind_param($stmt, "ii", $limit, $offset);
+
+    $success = mysqli_stmt_execute($stmt);
+
+    if (!$success) {
+        http_response_code(500);
+        mysqli_close($conn);
+        die('statement execution failed' . mysqli_stmt_error($stmt));
+    }
+
+    mysqli_stmt_bind_result($stmt, $productId, $name, $cost, $description, $imgUrl);
+
+    while (mysqli_stmt_fetch($stmt)) {
+        //params used in listItem as well as validateText
+        include TEMPLATES . "listItem.php";
+    }
+
+    mysqli_stmt_close($stmt);
+
+    mysqli_close($conn);
+}

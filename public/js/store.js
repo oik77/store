@@ -86,6 +86,7 @@ $(document).ready(function() {
                 $listItem.find('.item-cost').text(cost);
                 $listItem.find('.item-name').text(name);
                 $listItem.find('.item-description').text(description);
+                $('#update-form').hide();
             }
         });
     });

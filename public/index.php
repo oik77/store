@@ -22,7 +22,13 @@ require_once TEMPLATES . 'toolbar.php';
 require_once TEMPLATES . 'createForm.php';
 require_once TEMPLATES . 'updateForm.php';
 require_once TEMPLATES . 'productList.php';
+
 ?>
+
+<div id="product-list">
+    <?php includeListItems(100, 0); ?>
+    <button type="button">Next 100</button>
+</div>
 
 </body>
 </html>
