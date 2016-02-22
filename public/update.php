@@ -2,16 +2,16 @@
 define('RESOURCES', dirname(__DIR__) . "/resources/");
 define('TEMPLATES', RESOURCES . "templates/");
 
-if ($_SERVER["REQUEST_METHOD"] !== "GET") {
+if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     http_response_code(405);
     die("Method Not Allowed ");
 }
 
-$productId = filter_var($_GET["productId"], FILTER_VALIDATE_INT);
-$name = $_GET["name"];
-$cost = $_GET["cost"];
-$description = $_GET["description"];
-$imgUrl = $_GET["img_url"];
+$productId = filter_var($_POST["productId"], FILTER_VALIDATE_INT);
+$name = $_POST["name"];
+$cost = $_POST["cost"];
+$description = $_POST["description"];
+$imgUrl = $_POST["imgUrl"];
 
 if ($productId === false) {
     http_response_code(400);
@@ -24,7 +24,7 @@ if (!empty($cost) and filter_var($cost, FILTER_VALIDATE_FLOAT) === false) {
 }
 
 $updateValues = array();
-
+// FIXME prepare params
 if (!empty($name)) {
     $updateValues[] = "name='" . $name . "'";
 }

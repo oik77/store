@@ -20,6 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] !== "GET") {
 
 require_once TEMPLATES . 'toolbar.php';
 require_once TEMPLATES . 'createForm.php';
+require_once TEMPLATES . 'updateForm.php';
 require_once TEMPLATES . 'productList.php';
 ?>
 
