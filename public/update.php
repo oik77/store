@@ -7,19 +7,42 @@ if ($_SERVER["REQUEST_METHOD"] !== "GET") {
     die("Method Not Allowed ");
 }
 
+$productId = filter_var($_GET["productId"], FILTER_VALIDATE_INT);
 $name = $_GET["name"];
-$cost = filter_var($_GET["cost"], FILTER_VALIDATE_FLOAT);
+$cost = $_GET["cost"];
 $description = $_GET["description"];
 $imgUrl = $_GET["img_url"];
 
-if (empty($name)) {
+if ($productId === false) {
     http_response_code(400);
-    die("Product Name required");
+    die("Invalid productId");
 }
 
-if ($cost === false) {
+if (!empty($cost) and filter_var($cost, FILTER_VALIDATE_FLOAT) === false) {
     http_response_code(400);
     die("Invalid cost");
+}
+
+$updateValues = array();
+
+if (!empty($name)) {
+    $updateValues[] = "name='" . $name . "'";
+}
+if (!empty($cost)) {
+    $updateValues[] = "cost=" . $cost;
+}
+if (!empty($description)) {
+    $updateValues[] = "description='" . $description . "'";
+}
+if (!empty($imgUrl)) {
+    $updateValues[] = "img_url='" . $imgUrl . "'";
+}
+
+$updateValuesStr = implode(",", $updateValues);
+
+if (empty($updateValuesStr)) {
+    mysqli_close($conn);
+    die("nothing updated");
 }
 
 require_once(RESOURCES . "/config.php");
@@ -31,25 +54,16 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-if (empty($description) and empty($imgUrl)) {
-    $stmt = mysqli_prepare($conn, "INSERT INTO products(name, cost) VALUES (?, ?)");
-    mysqli_stmt_bind_param($stmt, "sd", $name, $cost);
-} elseif (empty($description)) {
-    $stmt = mysqli_prepare($conn, "INSERT INTO products(name, cost, img_url) VALUES (?, ?, ?)");
-    mysqli_stmt_bind_param($stmt, "sds", $name, $cost, $imgUrl);
-} elseif (empty($imgUrl)) {
-    $stmt = mysqli_prepare($conn, "INSERT INTO products(name, cost, description) VALUES (?, ?, ?)");
-    mysqli_stmt_bind_param($stmt, "sds", $name, $cost, $description);
-} else {
-    $stmt = mysqli_prepare($conn, "INSERT INTO products(name, cost, description, img_url) VALUES (?, ?, ?, ?)");
-    mysqli_stmt_bind_param($stmt, "sdss", $name, $cost, $description, $imgUrl);
-}
+$sql = "UPDATE products SET " . $updateValuesStr . " WHERE id_products=?";
+$stmt = mysqli_prepare($conn, $sql);
 
 if (!$stmt) {
     http_response_code(500);
     mysqli_close($conn);
     die("statement prepare error");
 }
+
+mysqli_stmt_bind_param($stmt, "i", $productId);
 
 $success = mysqli_stmt_execute($stmt);
 
