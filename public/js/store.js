@@ -96,12 +96,15 @@ $(document).ready(function() {
     });
 
     $('#next-btn').click(function() {
+        var $nextBtn = $(this);
         $.ajax({
             method: 'GET',
             url: 'listItems.php',
             data: {
                 limit: 100,
-                offset: $('#product-list').children().length
+                offset: $('#product-list').children().length,
+                orderBy: $nextBtn.attr('data-order-by'),
+                desc: $nextBtn.attr('data-desc')
             },
             success: function(data) {
                 var $items = $(data).appendTo('#product-list');

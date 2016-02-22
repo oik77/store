@@ -19,6 +19,13 @@ if ($offset === false) {
     die("Invalid offset");
 }
 
+$desc = filter_var($_GET['desc'], FILTER_VALIDATE_BOOLEAN);
+if ($_GET['orderBy'] === 'cost') {
+    $orderBy = "cost";
+} else {
+    $orderBy = "";
+}
+
 require_once TEMPLATES . 'productList.php';
 
-includeListItems($limit, $offset);
+includeListItems($limit, $offset, $orderBy, $desc);

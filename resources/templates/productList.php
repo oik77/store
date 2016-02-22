@@ -5,7 +5,7 @@ function validateText($data) {
     return $data;
 }
 
-function includeListItems($limit, $offset) {
+function includeListItems($limit, $offset, $orderBy, $desc) {
     require RESOURCES . "/config.php";
 
     $conn = mysqli_connect($serverName, $userName, $password, $schema);
@@ -15,7 +15,15 @@ function includeListItems($limit, $offset) {
         die("Connection failed: " . mysqli_connect_error());
     }
 
-    $stmt = mysqli_prepare($conn, "SELECT * FROM products LIMIT ? OFFSET ?");
+    if ($orderBy === "cost" and $desc) {
+        $query = "SELECT * FROM products ORDER BY cost DESC LIMIT ? OFFSET ?";
+    } elseif ($orderBy === "cost") {
+        $query = "SELECT * FROM products ORDER BY cost LIMIT ? OFFSET ?";
+    } else {
+        $query = "SELECT * FROM products LIMIT ? OFFSET ?";
+    }
+
+    $stmt = mysqli_prepare($conn, $query);
 
     if (!$stmt) {
         http_response_code(500);
@@ -33,7 +41,8 @@ function includeListItems($limit, $offset) {
         die('statement execution failed' . mysqli_stmt_error($stmt));
     }
 
-    mysqli_stmt_bind_result($stmt, $productId, $name, $cost, $description, $imgUrl);
+    mysqli_stmt_bind_result($stmt,
+        $productId, $name, $cost, $description, $imgUrl);
 
     while (mysqli_stmt_fetch($stmt)) {
         //params used in listItem as well as validateText
