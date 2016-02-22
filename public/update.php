@@ -25,6 +25,13 @@ if ($cost === false) {
     http_response_code(400);
     die("Invalid cost");
 }
+if (empty($description)) {
+    $description = NULL;
+}
+if (empty($imgUrl)) {
+    $imgUrl = NULL;
+}
+
 
 require_once(RESOURCES . "/config.php");
 

@@ -22,6 +22,13 @@ if ($cost === false) {
     die("Invalid cost");
 }
 
+if (empty($description)) {
+    $description = NULL;
+}
+if (empty($imgUrl)) {
+    $imgUrl = NULL;
+}
+
 require_once(RESOURCES . "/config.php");
 
 $conn = mysqli_connect($serverName, $userName, $password, $schema);
@@ -31,19 +38,8 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-if (empty($description) and empty($imgUrl)) {
-    $stmt = mysqli_prepare($conn, "INSERT INTO products(name, cost) VALUES (?, ?)");
-    mysqli_stmt_bind_param($stmt, "sd", $name, $cost);
-} elseif (empty($description)) {
-    $stmt = mysqli_prepare($conn, "INSERT INTO products(name, cost, img_url) VALUES (?, ?, ?)");
-    mysqli_stmt_bind_param($stmt, "sds", $name, $cost, $imgUrl);
-} elseif (empty($imgUrl)) {
-    $stmt = mysqli_prepare($conn, "INSERT INTO products(name, cost, description) VALUES (?, ?, ?)");
-    mysqli_stmt_bind_param($stmt, "sds", $name, $cost, $description);
-} else {
-    $stmt = mysqli_prepare($conn, "INSERT INTO products(name, cost, description, img_url) VALUES (?, ?, ?, ?)");
-    mysqli_stmt_bind_param($stmt, "sdss", $name, $cost, $description, $imgUrl);
-}
+$stmt = mysqli_prepare($conn,
+    "INSERT INTO products(name, cost, description, img_url) VALUES (?, ?, ?, ?)");
 
 if (!$stmt) {
     http_response_code(500);
@@ -51,6 +47,7 @@ if (!$stmt) {
     die("statement prepare error");
 }
 
+mysqli_stmt_bind_param($stmt, "sdss", $name, $cost, $description, $imgUrl);
 $success = mysqli_stmt_execute($stmt);
 
 if (!$success) {

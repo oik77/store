@@ -15,7 +15,7 @@ $(document).ready(function() {
                 name: $('#create-name').val(),
                 cost: $('#create-cost').val(),
                 description: $('#create-description').val(),
-                img_url: $('#create-img').val()
+                imgUrl: $('#create-img').val()
             },
             success: function() {
                 alert('success');
@@ -86,7 +86,6 @@ $(document).ready(function() {
                 $listItem.find('.item-cost').text(cost);
                 $listItem.find('.item-name').text(name);
                 $listItem.find('.item-description').text(description);
-
             }
         });
     });
