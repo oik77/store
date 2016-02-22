@@ -8,18 +8,18 @@ if ($_SERVER["REQUEST_METHOD"] !== "GET") {
 }
 
 $name = $_GET["name"];
-$cost = $_GET["cost"];
+$cost = filter_var($_GET["cost"], FILTER_VALIDATE_FLOAT);
 $description = $_GET["description"];
 $imgUrl = $_GET["img_url"];
 
-if (empty($name) or empty($cost)) {
+if (empty($name)) {
     http_response_code(400);
-    die("Product Name and Cost are required");
+    die("Product Name required");
 }
 
-if (!filter_var($cost, FILTER_VALIDATE_FLOAT)) {
+if ($cost === false) {
     http_response_code(400);
-    die("Cost should be float");
+    die("Invalid cost");
 }
 
 require_once(RESOURCES . "/config.php");

@@ -27,10 +27,16 @@ $(document).ready(function() {
         $.ajax({
             method: 'GET',
             url: '/delete.php',
-            data: { id: $listItem.data('id') },
+            data: { productId: $listItem.data('id') },
             success: function() {
                 $listItem.remove();
             }
         });
-    })
+    });
+
+    $('.update-btn').click(function() {
+        var $listItem = $(this).parent().parent();
+        
+        // TODO: show update form
+    });
 });

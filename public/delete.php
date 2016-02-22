@@ -7,10 +7,10 @@ if ($_SERVER["REQUEST_METHOD"] !== "GET") {
     die("Method Not Allowed ");
 }
 
-$productId = $_GET["id"];
-if (empty($productId)) {
+$productId = filter_var($_GET["productId"], FILTER_VALIDATE_INT);
+if ($productId === false) {
     http_response_code(400);
-    die("invalid product id");
+    die("Invalid productId");
 }
 
 require_once(RESOURCES . "/config.php");
@@ -29,7 +29,7 @@ if (!$stmt) {
     die("statement prepare error");
 }
 
-mysqli_stmt_bind_param($stmt, "d", $productId);
+mysqli_stmt_bind_param($stmt, "i", $productId);
 
 $success = mysqli_stmt_execute($stmt);
 
