@@ -1,4 +1,38 @@
 $(document).ready(function() {
+    function onUpdateBtn() {
+        var $listItem = $(this).parent().parent();
+        var imgUrl = $listItem.find('.item-img').attr('src');
+        var cost = $listItem.find('.item-cost').text();
+        var name = $listItem.find('.item-name').text();
+        var description = $listItem.find('.item-description').text();
+        var productId = $listItem.attr('data-id');
+        var $updateForm = $('#update-form');
+
+        $updateForm.attr('data-id', productId);
+        $updateForm.find('#update-name').val(name);
+        $updateForm.find('#update-cost').val(cost);
+        $updateForm.find('#update-description').val(description);
+        $updateForm.find('#update-img').val(imgUrl);
+
+        $updateForm.appendTo($listItem);
+        $updateForm.show();
+    }
+
+    function onDeleteBtn() {
+        if (!confirm('Are you sure?')) return;
+
+        var $listItem = $(this).parent().parent();
+
+        $.ajax({
+            method: 'GET',
+            url: '/delete.php',
+            data: { productId: $listItem.data('id') },
+            success: function() {
+                $listItem.remove();
+            }
+        });
+    }
+
     $('#create-btn').click(function() {
         $('#create-form').show()
     });
@@ -23,39 +57,9 @@ $(document).ready(function() {
         });
     });
 
-    $('.delete-btn').click(function() {
-        if (!confirm('Are you sure?')) return;
+    $('.delete-btn').click(onDeleteBtn);
+    $('.update-btn').click(onUpdateBtn);
 
-        var $listItem = $(this).parent().parent();
-
-        $.ajax({
-            method: 'GET',
-            url: '/delete.php',
-            data: { productId: $listItem.data('id') },
-            success: function() {
-                $listItem.remove();
-            }
-        });
-    });
-
-    $('.update-btn').click(function() {
-        var $listItem = $(this).parent().parent();
-        var imgUrl = $listItem.find('.item-img').attr('src');
-        var cost = $listItem.find('.item-cost').text();
-        var name = $listItem.find('.item-name').text();
-        var description = $listItem.find('.item-description').text();
-        var productId = $listItem.attr('data-id');
-        var $updateForm = $('#update-form');
-
-        $updateForm.attr('data-id', productId);
-        $updateForm.find('#update-name').val(name);
-        $updateForm.find('#update-cost').val(cost);
-        $updateForm.find('#update-description').val(description);
-        $updateForm.find('#update-img').val(imgUrl);
-
-        $updateForm.appendTo($listItem);
-        $updateForm.show();
-    });
     $('#cancel-update').click(function() {
         $('#update-form').hide();
     });
@@ -87,6 +91,22 @@ $(document).ready(function() {
                 $listItem.find('.item-name').text(name);
                 $listItem.find('.item-description').text(description);
                 $('#update-form').hide();
+            }
+        });
+    });
+
+    $('#next-btn').click(function() {
+        $.ajax({
+            method: 'GET',
+            url: 'listItems.php',
+            data: {
+                limit: 100,
+                offset: $('#product-list').children().length
+            },
+            success: function(data) {
+                var $items = $(data).appendTo('#product-list');
+                $items.find('.update-btn').click(onUpdateBtn);
+                $items.find('.delete-btn').click(onDeleteBtn);
             }
         });
     });

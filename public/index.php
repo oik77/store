@@ -27,8 +27,8 @@ require_once TEMPLATES . 'productList.php';
 
 <div id="product-list">
     <?php includeListItems(100, 0); ?>
-    <button type="button">Next 100</button>
 </div>
+<button id="next-btn" type="button">Next 100</button>
 
 </body>
 </html>
