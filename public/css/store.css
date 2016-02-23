@@ -18,19 +18,33 @@
     margin-top: 5px;
 }
 .list-item {
+    position: relative;
     border: 1px solid #D5D5D5;
     margin-bottom: -1px;
     padding-bottom: 5px;
 }
-.item-img {
+.item-left {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
     float: left;
-    width: 200px;
 }
-.item-content {
+.item-left > img {
+    width: 180px;
+    max-height: 200px;
+}
+.item-center {
     margin-left: 200px;
     margin-right: 200px;
 }
-.item-cost {
-    width: 200px;
+.item-description {
+    height: 100px;
+    overflow-y: scroll;
+}
+.item-right {
+    width: 180px;
     float: right;
+    padding-top: 20px;
+    font-weight: bold;
+    font-size: larger;
 }
