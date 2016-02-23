@@ -99,7 +99,7 @@ $(document).ready(function() {
         var $nextBtn = $(this);
         $.ajax({
             method: 'GET',
-            url: 'listItems.php',
+            url: 'list.php',
             data: {
                 limit: 100,
                 offset: $('#product-list').children().length,
