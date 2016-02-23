@@ -15,7 +15,7 @@ $imgUrl = $_POST["imgUrl"];
 
 if ($productId === false) {
     http_response_code(400);
-    die("Invalid productId");
+    die("Invalid productId: " . $_POST["productId"]);
 }
 if (empty($name)) {
     http_response_code(400);
@@ -64,7 +64,7 @@ $success = mysqli_stmt_execute($stmt);
 if (!$success) {
     http_response_code(500);
     mysqli_close($conn);
-    die('statement execution failed' . mysqli_stmt_error($stmt));
+    die('statement execution failed: ' . mysqli_stmt_error($stmt));
 }
 
 mysqli_stmt_close($stmt);

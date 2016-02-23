@@ -39,7 +39,7 @@
 }
 .item-description {
     height: 100px;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 .item-right {
     width: 180px;

@@ -38,7 +38,7 @@ function includeListItems($limit, $offset, $orderBy, $desc) {
     if (!$success) {
         http_response_code(500);
         mysqli_close($conn);
-        die('statement execution failed' . mysqli_stmt_error($stmt));
+        die('statement execution failed: ' . mysqli_stmt_error($stmt));
     }
 
     mysqli_stmt_bind_result($stmt,
