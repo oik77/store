@@ -2,6 +2,8 @@
 define('RESOURCES', dirname(__DIR__) . "/resources/");
 define('TEMPLATES', RESOURCES . "templates/");
 
+require_once TEMPLATES . "memcacheTest.php";
+
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     http_response_code(405);
     die("Method Not Allowed ");
@@ -33,7 +35,7 @@ if (empty($imgUrl)) {
 }
 
 
-require_once(RESOURCES . "/config.php");
+require_once RESOURCES . "/config.php";
 
 $conn = mysqli_connect($serverName, $userName, $password, $schema);
 
