@@ -31,7 +31,7 @@ if (empty($imgUrl)) {
     $imgUrl = NULL;
 }
 
-require_once(RESOURCES . "/config.php");
+require_once RESOURCES . "/config.php";
 
 $conn = mysqli_connect($serverName, $userName, $password, $schema);
 

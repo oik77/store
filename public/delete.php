@@ -15,7 +15,7 @@ if ($productId === false) {
     die("Invalid productId");
 }
 
-require_once(RESOURCES . "/config.php");
+require_once RESOURCES . "/config.php";
 
 $conn = mysqli_connect($serverName, $userName, $password, $schema);
 
