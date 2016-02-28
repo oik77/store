@@ -1,13 +1,6 @@
 #toolbar {
     margin-bottom: 5px;
 }
-#toolbar a {
-    text-decoration: none;
-    color: black;
-}
-#toolbar a:visited, #toolbar a:focus {
-    color: black;
-}
 #create-form {
     padding: 5px;
 }

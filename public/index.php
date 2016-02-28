@@ -34,10 +34,8 @@ if ($desc or empty($orderBy)) {
 
 <div id="toolbar">
     <button id="create-btn" type="button">Create</button>
-    <button type="button">
-        <a href="<?php echo $sortRef; ?>">
-            Sort by Cost
-        </a>
+    <button type="button" onclick="window.location.href='<?php echo $sortRef; ?>'">
+    Sort by Cost
     </button>
 </div>
 
