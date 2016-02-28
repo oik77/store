@@ -1,6 +1,6 @@
 $(document).ready(function() {
     function onUpdateBtn() {
-        var $listItem = $(this).parent().parent();
+        var $listItem = $(this).parent().parent().parent();
         var imgUrl = $listItem.find('.item-img').attr('src');
         var cost = $listItem.find('.item-cost').text();
         var name = $listItem.find('.item-name').text();
@@ -21,7 +21,7 @@ $(document).ready(function() {
     function onDeleteBtn() {
         if (!confirm('Are you sure?')) return;
 
-        var $listItem = $(this).parent().parent();
+        var $listItem = $(this).parent().parent().parent();
 
         $.ajax({
             method: 'GET',
