@@ -2,12 +2,14 @@
 define('RESOURCES', dirname(__DIR__) . "/resources/");
 define('TEMPLATES', RESOURCES . "templates/");
 
-require_once TEMPLATES . "memcacheTest.php";
-
 if ($_SERVER["REQUEST_METHOD"] !== "GET") {
     http_response_code(405);
     die("Method Not Allowed ");
 }
+
+require_once TEMPLATES . "memcacheTest.php";
+
+memcacheTest(1);
 
 $desc = filter_var($_GET['desc'], FILTER_VALIDATE_BOOLEAN);
 if ($_GET['orderBy'] === 'cost') {

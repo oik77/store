@@ -2,12 +2,14 @@
 define('RESOURCES', dirname(__DIR__) . "/resources/");
 define('TEMPLATES', RESOURCES . "templates/");
 
-require_once TEMPLATES . "memcacheTest.php";
-
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     http_response_code(405);
     die("Method Not Allowed ");
 }
+
+require_once TEMPLATES . "memcacheTest.php";
+
+memcacheTest(1);
 
 $productId = filter_var($_POST["productId"], FILTER_VALIDATE_INT);
 $name = $_POST["name"];
