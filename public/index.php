@@ -26,6 +26,7 @@ if ($desc or empty($orderBy)) {
 <!DOCTYPE html>
 <html>
 <head>
+    <title>Store</title>
     <link rel="stylesheet" href="css/store.css">
     <script src="//code.jquery.com/jquery-2.2.0.min.js"></script>
     <script src="js/store.js"></script>
