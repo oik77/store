@@ -5,7 +5,7 @@ function validateText($data) {
     return $data;
 }
 
-function includeListItems($limit, $offset, $orderBy, $desc) {
+function loadFromDB($limit, $offset, $orderBy, $desc) {
     require RESOURCES . "/config.php";
 
     $conn = mysqli_connect($serverName, $userName, $password, $schema);
@@ -41,15 +41,46 @@ function includeListItems($limit, $offset, $orderBy, $desc) {
         die('statement execution failed: ' . mysqli_stmt_error($stmt));
     }
 
-    mysqli_stmt_bind_result($stmt,
-        $productId, $name, $cost, $description, $imgUrl);
-
-    while (mysqli_stmt_fetch($stmt)) {
-        //params used in listItem as well as validateText
-        include TEMPLATES . "listItem.php";
-    }
+    $res = mysqli_stmt_get_result($stmt);
+    $rows = mysqli_fetch_all($res, MYSQLI_ASSOC);
 
     mysqli_stmt_close($stmt);
-
     mysqli_close($conn);
+
+    return $rows;
+}
+
+# desc: bool
+function includeListItems($limit, $offset, $orderBy, $desc) {
+    $listKey = sprintf("store.limit=%d&offset=%d&orderBy=%s&desc=%d",
+        $limit, $offset, $orderBy, $desc);
+
+    $memcache = memcache_connect("127.0.0.1", 11211);
+
+    if ($memcache) {
+        $rows = memcache_get($memcache, $listKey);
+        if ($rows === false) {
+            $rows = loadFromDB($limit, $offset, $orderBy, $desc);
+            memcache_set($memcache, $listKey, $rows, 0, 15);
+            $num_rows = count($rows);
+            error_log(sprintf("cache set [key: %s, num_rows: %d]", $listKey, $num_rows));
+        } else {
+            $num_rows = count($rows);
+            error_log(sprintf("cache hit [key: %s, num_rows: %d]", $listKey, $num_rows));
+        }
+
+        memcache_close($memcache);
+    } else {
+        error_log("could not connect to memcached");
+        $rows = loadFromDB($limit, $offset, $orderBy, $desc);
+    }
+
+    foreach ($rows as $row) {
+        $productId = $row['id_products'];
+        $name = $row['name'];
+        $cost = $row['cost'];
+        $description = $row['description'];
+        $imgUrl = $row['img_url'];
+        include TEMPLATES . 'listItem.php';
+    }
 }
