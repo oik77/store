@@ -21,7 +21,7 @@ if ($offset === false) {
 
 require_once TEMPLATES . "memcacheTest.php";
 
-memcacheTest(intval(1 + (16 * $limit / 100)));
+memcacheTest(intval(1 + ($limit / 100)));
 
 $desc = filter_var($_GET['desc'], FILTER_VALIDATE_BOOLEAN);
 if ($_GET['orderBy'] === 'cost') {

@@ -57,7 +57,7 @@ function saveInCache($memcache, $listKey, $rows, $timeout) {
     memcache_set($memcache, $listKey, $rows, 0, $timeout);
     foreach ($rows as $row) {
         $itemKey = sprintf("store.item-%d", $row["id_products"]);
-        error_log('cache set:' . $itemKey);
+        # error_log('cache set:' . $itemKey);
 
         $listKeys = memcache_get($memcache, $itemKey);
         if ($listKeys === false) {

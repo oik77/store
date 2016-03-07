@@ -7,14 +7,14 @@ function memcacheTest($weight, $timeout = 1) {
 
     if ($memcache) {
         $currentNumber = memcache_get($memcache, $CONN_NUM_KEY);
-
+        #error_log(sprintf("memcache test: %d connections", $currentNumber));
         if ($currentNumber === false) {
             memcache_set($memcache, $CONN_NUM_KEY, $weight, 0, $timeout);
         } elseif ($currentNumber > $maxWeight) {
             http_response_code(202);
             die('server is busy');
         } else {
-            memcache_set($memcache, $CONN_NUM_KEY, $currentNumber + $weight, 0, $timeout);
+            memcache_increment($memcache, $CONN_NUM_KEY, $weight);
         }
 
         memcache_close($memcache);
