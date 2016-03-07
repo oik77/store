@@ -74,3 +74,5 @@ if (!$success) {
 mysqli_stmt_close($stmt);
 
 mysqli_close($conn);
+
+updateCache($productId, $name, $cost, $description, $imgUrl);

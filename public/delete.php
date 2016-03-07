@@ -44,3 +44,5 @@ if (!$success) {
 }
 
 mysqli_close($conn);
+
+clearCache();
