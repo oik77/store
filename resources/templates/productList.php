@@ -20,7 +20,7 @@ function loadFromDB($limit, $offset, $orderBy, $desc) {
     } elseif ($orderBy === "cost") {
         $query = "SELECT id_products FROM products ORDER BY cost LIMIT ? OFFSET ?";
     } else {
-        $query = "SELECT id_products FROM products LIMIT ? OFFSET ?";
+        $query = "SELECT id_products FROM products ORDER BY id_products LIMIT ? OFFSET ?";
     }
 
     # optimization hack
