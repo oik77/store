@@ -50,6 +50,22 @@ function loadFromDB($limit, $offset, $orderBy, $desc) {
     return $rows;
 }
 
+function saveInCache($memcache, $listKey, $rows, $timeout) {
+    memcache_set($memcache, $listKey, $rows, 0, $timeout);
+    foreach ($rows as $row) {
+        $itemKey = sprintf("store.item-%d", $row["id_products"]);
+        error_log('cache set:' . $itemKey);
+
+        $listKeys = memcache_get($memcache, $itemKey);
+        if ($listKeys === false) {
+            $listKeys = array();
+        }
+        $listKeys[$listKey] = true;
+
+        memcache_set($memcache, $itemKey, $listKeys, 0, $timeout);
+    }
+}
+
 # desc: bool
 function includeListItems($limit, $offset, $orderBy, $desc) {
     $listKey = sprintf("store.limit=%d&offset=%d&orderBy=%s&desc=%d",
@@ -61,7 +77,7 @@ function includeListItems($limit, $offset, $orderBy, $desc) {
         $rows = memcache_get($memcache, $listKey);
         if ($rows === false) {
             $rows = loadFromDB($limit, $offset, $orderBy, $desc);
-            memcache_set($memcache, $listKey, $rows, 0, 15);
+            saveInCache($memcache, $listKey, $rows, 3600);
             $num_rows = count($rows);
             error_log(sprintf("cache set [key: %s, num_rows: %d]", $listKey, $num_rows));
         } else {
