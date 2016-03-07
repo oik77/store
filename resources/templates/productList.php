@@ -16,12 +16,15 @@ function loadFromDB($limit, $offset, $orderBy, $desc) {
     }
 
     if ($orderBy === "cost" and $desc) {
-        $query = "SELECT * FROM products ORDER BY cost DESC LIMIT ? OFFSET ?";
+        $query = "SELECT id_products FROM products ORDER BY cost DESC LIMIT ? OFFSET ?";
     } elseif ($orderBy === "cost") {
-        $query = "SELECT * FROM products ORDER BY cost LIMIT ? OFFSET ?";
+        $query = "SELECT id_products FROM products ORDER BY cost LIMIT ? OFFSET ?";
     } else {
-        $query = "SELECT * FROM products LIMIT ? OFFSET ?";
+        $query = "SELECT id_products FROM products LIMIT ? OFFSET ?";
     }
+
+    # optimization hack
+    $query = "SELECT t.* FROM (" . $query . ") AS q JOIN products AS t ON q.id_products = t.id_products";
 
     $stmt = mysqli_prepare($conn, $query);
 
