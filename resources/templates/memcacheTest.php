@@ -48,7 +48,7 @@ function updateCache($productId, $name, $cost, $description, $imgUrl) {
             if (!$list) continue;
 
             foreach ($list as $num => $item) {
-                if ($item["id_products"] !== $productId) break;
+                if ($item["id_products"] === $productId) break;
             }
             $list[$num]["name"] = $name;
             $list[$num]["cost"] = $cost;
